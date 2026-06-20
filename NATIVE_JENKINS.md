@@ -1,8 +1,8 @@
-# Jenkins Installation and SSH Setup Guide
+# Jenkins Installation and Remote Node Setup Guide
 
 ## Prerequisites
 
-Install Java 21 and font support:
+Install Java:
 
 ```bash
 sudo apt install fontconfig openjdk-21-jre
@@ -10,16 +10,16 @@ sudo apt install fontconfig openjdk-21-jre
 
 ---
 
-## Add Jenkins Repository
+# Install Jenkins
 
-Download the Jenkins repository key:
+## Add Jenkins Repository Key
 
 ```bash
 sudo wget -O /etc/apt/keyrings/jenkins-keyring.asc \
 https://pkg.jenkins.io/debian-stable/jenkins.io-2026.key
 ```
 
-Add the Jenkins repository:
+## Add Repository
 
 ```bash
 echo "deb [signed-by=/etc/apt/keyrings/jenkins-keyring.asc] \
@@ -27,15 +27,11 @@ https://pkg.jenkins.io/debian-stable binary/" | \
 sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
 ```
 
-Update package information:
+Update packages:
 
 ```bash
 sudo apt update
 ```
-
----
-
-## Install Jenkins
 
 Install Jenkins:
 
@@ -43,111 +39,315 @@ Install Jenkins:
 sudo apt install jenkins
 ```
 
-Enable Jenkins to start automatically:
+Enable and start Jenkins:
 
 ```bash
 sudo systemctl enable jenkins
-```
-
-Start the Jenkins service:
-
-```bash
 sudo systemctl start jenkins
 ```
 
-Check the service status:
+Check status:
 
 ```bash
 sudo systemctl status jenkins
 ```
 
----
-
-## Configure Firewall
-
-Allow access to Jenkins on port **8080**:
+Allow port 8080:
 
 ```bash
 sudo ufw allow 8080/tcp
 ```
 
----
-
-## Get Initial Admin Password
-
-Retrieve the Jenkins initial admin password:
+Get initial admin password:
 
 ```bash
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 ```
 
-Use this password to complete the setup at:
+Open:
 
 ```
-http://<server-ip>:8080
+http://<JENKINS_SERVER_IP>:8080
 ```
+
+Complete the Jenkins setup wizard.
 
 ---
 
-# SSH Key Setup
+# Configure SSH Keys
 
-## Generate an SSH Key Pair
+## Generate SSH Key
 
-Create a 4096-bit RSA key:
+On the Jenkins server:
 
 ```bash
 ssh-keygen -t rsa -b 4096
 ```
 
+Press Enter to accept defaults.
+
 ---
 
-## Copy Public Key to Remote Server
+## Display Public Key
 
-Copy your SSH key to the remote machine:
+```bash
+cat ~/.ssh/id_rsa.pub
+```
+
+Example:
+
+```text
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQ... user@hostname
+```
+
+Copy the entire output.
+
+---
+
+## Add Public Key to Remote Machine
+
+### Method 1 (Recommended)
 
 ```bash
 ssh-copy-id ash@192.168.1.202
 ```
 
----
+### Method 2 (Manual)
 
-## Connect to Remote Server
-
-Log in to the server:
+SSH into the remote machine:
 
 ```bash
 ssh ash@192.168.1.202
 ```
 
+Create `.ssh` directory if needed:
+
+```bash
+mkdir -p ~/.ssh
+chmod 700 ~/.ssh
+```
+
+Edit authorized_keys:
+
+```bash
+nano ~/.ssh/authorized_keys
+```
+
+Paste the contents of:
+
+```bash
+cat ~/.ssh/id_rsa.pub
+```
+
+Save and exit.
+
+Set permissions:
+
+```bash
+chmod 600 ~/.ssh/authorized_keys
+```
+
 ---
 
-## View Private Key
+## Verify Passwordless Login
 
-Display your private key:
+From Jenkins server:
+
+```bash
+ssh ash@192.168.1.202
+```
+
+Login should occur without asking for a password.
+
+---
+
+# Add Remote Node (Agent) in Jenkins
+
+## Step 1: Open Jenkins Dashboard
+
+Navigate to:
+
+```
+Manage Jenkins
+    ↓
+Nodes
+    ↓
+New Node
+```
+
+---
+
+## Step 2: Create Node
+
+Node name:
+
+```
+agent1
+```
+
+Select:
+
+```
+Permanent Agent
+```
+
+Click **Create**.
+
+---
+
+## Step 3: Configure Agent
+
+### Number of executors
+
+```
+1
+```
+
+### Remote root directory
+
+Example:
+
+```
+/home/ash/jenkins-agent
+```
+
+Create directory on remote machine:
+
+```bash
+ssh ash@192.168.1.202
+
+mkdir -p ~/jenkins-agent
+```
+
+### Labels
+
+```
+linux
+```
+
+### Usage
+
+```
+Use this node as much as possible
+```
+
+### Launch method
+
+Choose:
+
+```
+Launch agents via SSH
+```
+
+---
+
+## Step 4: Configure SSH Connection
+
+Host:
+
+```
+192.168.1.202
+```
+
+Credentials:
+
+```
+Add → Jenkins
+```
+
+Kind:
+
+```
+SSH Username with private key
+```
+
+Username:
+
+```
+ash
+```
+
+Private Key:
+
+```
+Enter directly
+```
+
+Paste contents of:
 
 ```bash
 cat ~/.ssh/id_rsa
 ```
 
-> ⚠️ **Security Warning**
->
-> Never share or expose your private key (`id_rsa`). Only the public key (`id_rsa.pub`) should be shared.
+(From the Jenkins server)
+
+ID:
+
+```
+agent1-key
+```
+
+Description:
+
+```
+SSH key for agent1
+```
+
+Click **Add**.
 
 ---
 
-## Summary
+## Step 5: Save
 
-| Task                   | Command                                                  |
-| ---------------------- | -------------------------------------------------------- |
-| Install Java           | `sudo apt install fontconfig openjdk-21-jre`             |
-| Add Jenkins Repository | `wget ...jenkins.io-2026.key`                            |
-| Update Packages        | `sudo apt update`                                        |
-| Install Jenkins        | `sudo apt install jenkins`                               |
-| Start Jenkins          | `sudo systemctl start jenkins`                           |
-| Enable Auto Start      | `sudo systemctl enable jenkins`                          |
-| Check Status           | `sudo systemctl status jenkins`                          |
-| Allow Port 8080        | `sudo ufw allow 8080/tcp`                                |
-| Get Admin Password     | `sudo cat /var/lib/jenkins/secrets/initialAdminPassword` |
-| Generate SSH Key       | `ssh-keygen -t rsa -b 4096`                              |
-| Copy Key to Server     | `ssh-copy-id ash@192.168.1.202`                          |
-| Connect to Server      | `ssh ash@192.168.1.202`                                  |
+Click:
+
+```
+Save
+```
+
+Jenkins will connect to the remote machine and install the agent automatically.
+
+---
+
+# Verify Agent
+
+Go to:
+
+```
+Dashboard
+    ↓
+Nodes
+```
+
+The node should display:
+
+```
+agent1
+Status: Connected
+```
+
+---
+
+# Test
+
+Pipeline example:
+
+```groovy
+pipeline {
+    agent {
+        label 'linux'
+    }
+
+    stages {
+        stage('Test') {
+            steps {
+                sh 'hostname'
+                sh 'whoami'
+                sh 'java -version'
+            }
+        }
+    }
+}
+```
+
+This confirms that builds are running on the remote agent.
