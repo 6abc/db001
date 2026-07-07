@@ -13,7 +13,8 @@
     ```
     Static Config as per link
     ```sh
-    interface enp0s3
+    interface enp0s18
     static ip_address=192.168.0.200/24
     static routers=192.168.0.1
+    static domain_name_servers=8.8.8.8 1.1.1.1
     ``` 
