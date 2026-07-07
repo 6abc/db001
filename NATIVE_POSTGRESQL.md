@@ -1,14 +1,20 @@
 # Install 
-# Fin supported version
+## Find supported version
+```sh
 apt search postgresql | grep '^postgresql-[0-9]'
-# Use supported version as per above command
-sudo apt install postgresql-<Version> postgresql-client-<Version> -y
-ex : sudo apt install postgresql-16 postgresql-client-16 -y
+```
+## Use supported version as per above command
+```sh
+# sudo apt install postgresql-<Version> postgresql-client-<Version> -y
+sudo apt install postgresql-17 postgresql-client-17 -y
+```
 
 # Start and Enable Verify Install
+```sh
 sudo systemctl enable postgresql
 sudo systemctl start postgresql
 sudo systemctl status postgresql
+```
 
 # Create database and user {USER=therapy_user | PASS=therapy_pass | DB=therapy_db}
 sudo -u postgres psql
