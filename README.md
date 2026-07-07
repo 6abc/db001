@@ -6,7 +6,7 @@
 
 ## Static IP Address
 
-1. Debian - /etc/network/interfaces
+1. Debian - /etc/dhcpcd.conf
     Find Link :
     ```sh
     ip link show
