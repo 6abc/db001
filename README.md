@@ -13,6 +13,7 @@
     ```
     Static Config as per link
     ```sh
+    #iface ens18 inet dhcp
     auto ens18
     iface ens18 inet static
         address 192.168.0.200
