@@ -38,8 +38,12 @@ sudo nano /etc/postgresql/<Version>/main/postgresql.conf
 + listen_addresses = '*'
 
 ### Configure client authentication
+```sh
 sudo nano /etc/postgresql/<Version>/main/pg_hba.conf
+```
+```sh
 host    all    all    192.168.0.0/24    scram-sha-256
+```
 > optional
 > host    all    all    192.168.0.20/32    scram-sha-256
 
