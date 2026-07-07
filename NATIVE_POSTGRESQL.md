@@ -31,7 +31,9 @@ sudo -u postgres psql
 ```
 
 ### Update Config to Allow remote connections
+```sh
 sudo nano /etc/postgresql/<Version>/main/postgresql.conf
+```
 - listen_addresses = 'localhost'
 + listen_addresses = '*'
 
