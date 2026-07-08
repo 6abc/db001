@@ -38,7 +38,8 @@ redis-cli -h "$IP" ping
 ```
 > YesPass
 ```sh
-redis-cli -h 192.168.0.9 -a your_redis_password ping
+IP=$(hostname -I | awk '{print $1}')
+redis-cli -h "$IP" -a your_redis_password ping
 ```
 # Remote Verify
 ```sh
