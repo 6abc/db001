@@ -33,7 +33,8 @@ sudo ufw status
 
 # Verify
 ```sh
-redis-cli -h 192.168.0.9 ping
+IP=$(hostname -I | awk '{print $1}')
+redis-cli -h "$IP" ping
 ```
 > YesPass
 ```sh
