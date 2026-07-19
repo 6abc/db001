@@ -69,8 +69,9 @@ psql -h 192.168.0.9 -U therapy_user -d therapy_db
 
 ### Database Investigation
 ```sh
-\dt
-\d table_name
-\dn
-\q
+\l             - List the databases
+\dt            - List all tables in the database.
+\d table_name  - Describe a specific table's columns and data types.
+\dn            - List all schemas.
+\q             - Exit the PostgreSQL shell back to Kali Linux.
 ```
