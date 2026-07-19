@@ -66,3 +66,11 @@ sudo ufw status
 sudo apt install postgresql-client -y
 psql -h 192.168.0.9 -U therapy_user -d therapy_db
 ```
+
+### Database Investigation
+```sh
+\dt
+\d table_name
+\dn
+\q
+```
