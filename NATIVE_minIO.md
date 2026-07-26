@@ -402,6 +402,8 @@ Password
 
 # Step 16 - Install MinIO Client
 
+In the MinIO Community Edition, user and policy management must be performed exclusively via the mc (MinIO Client) command-line tool
+
 ```bash
 cd /tmp
 
