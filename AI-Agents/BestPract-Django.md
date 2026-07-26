@@ -1,5 +1,5 @@
 ---
-name: django-repo-agent
+name: BestPract-Django.md
 description: Repository agent for Django projects using clean layering, services, utilities, management commands, DRF, Bootstrap 5, and jQuery.
 version: 1.0.0
 ---
