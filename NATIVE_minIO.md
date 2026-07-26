@@ -464,19 +464,75 @@ mc admin user list local
 
 ---
 
-# Step 20 - Attach Policy
+# Step 20 - Create and Attach a Custom Django Policy (Recommended)
 
-For development and homelab environments, attach the built-in read/write policy:
+Create a policy file:
+
+```bash
+nano django-media-policy.json
+```
+
+Paste:
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetBucketLocation",
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::media"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::media/*"
+            ]
+        }
+    ]
+}
+```
+
+Create the policy:
+
+```bash
+mc admin policy create local django-media django-media-policy.json
+```
+
+Attach the policy:
+
+```bash
+mc admin policy attach local django-media --user django
+```
+
+Verify:
+
+```bash
+mc admin user info local django
+```
+
+Expected output should show the `django-media` policy attached to the `django` user.
+
+### Homelab Alternative
+
+If you do not need bucket-level restrictions, you can simply attach the built-in `readwrite` policy:
 
 ```bash
 mc admin policy attach local readwrite --user django
 ```
 
-Verify
+This grants read/write access to all buckets and is suitable for small homelab environments.
 
-```bash
-mc admin user info local django
-```
 Useful Administration Commands
 
 | Action        | Command                                           |
