@@ -504,34 +504,61 @@ pip install django-storages boto3
 
 ---
 
-# Step 23 - Django settings.py
+# Step 23 - Django Configuration (Django 5.1+ / 6.x)
+
+Install the required packages:
+
+```bash
+pip install django-storages boto3
+```
+
+Add `storages` to your installed apps:
 
 ```python
 INSTALLED_APPS += [
     "storages",
 ]
+```
 
-DEFAULT_FILE_STORAGE = "storages.backends.s3.S3Storage"
+Configure the storage backend:
 
+```python
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3.S3Storage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
+```
+
+Configure MinIO:
+
+```python
 AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
 
 AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
-
 AWS_S3_ENDPOINT_URL = env("AWS_S3_ENDPOINT_URL")
-
-AWS_S3_REGION_NAME = env(
-    "AWS_S3_REGION_NAME",
-    default="us-east-1",
-)
+AWS_S3_REGION_NAME = env("AWS_S3_REGION_NAME", default="us-east-1")
 
 AWS_S3_ADDRESSING_STYLE = "path"
-
 AWS_S3_SIGNATURE_VERSION = "s3v4"
 
 AWS_DEFAULT_ACL = None
-
 AWS_QUERYSTRING_AUTH = False
+```
+
+Example `.env`:
+
+```env
+AWS_ACCESS_KEY_ID=django
+AWS_SECRET_ACCESS_KEY=YourStrongPassword
+
+AWS_STORAGE_BUCKET_NAME=media
+AWS_S3_ENDPOINT_URL=http://192.168.0.3:9000
+AWS_S3_REGION_NAME=us-east-1
 ```
 
 ---
