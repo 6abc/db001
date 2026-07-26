@@ -477,6 +477,22 @@ Verify
 ```bash
 mc admin user info local django
 ```
+Useful Administration Commands
+
+| Action        | Command                                           |
+| ------------- | ------------------------------------------------- |
+| List users    | `mc admin user list local`                        |
+| Create user   | `mc admin user add local USER PASSWORD`           |
+| Disable user  | `mc admin user disable local USER`                |
+| Enable user   | `mc admin user enable local USER`                 |
+| Delete user   | `mc admin user remove local USER`                 |
+| User details  | `mc admin user info local USER`                   |
+| List policies | `mc admin policy list local`                      |
+| Show policy   | `mc admin policy info local POLICY`               |
+| Create policy | `mc admin policy create local POLICY policy.json` |
+| Attach policy | `mc admin policy attach local POLICY --user USER` |
+| Detach policy | `mc admin policy detach local POLICY --user USER` |
+| Delete policy | `mc admin policy remove local POLICY`             |
 
 ---
 
