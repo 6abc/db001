@@ -9,3 +9,25 @@
 
 ## Static IP Address
 ### Keep DHCP, Reserve the IP in Your Router ⭐ (Best Practice)
+
+                       Internet
+                           │
+                    Cloudflare Tunnel
+                           │
+                      Traefik Ingress
+                           │
+               ┌────────────────────────┐
+               │     k3s Cluster        │
+               │                        │
+               │ Django Pods            │
+               │ Celery Workers         │
+               └──────────┬─────────────┘
+                          │
+            ┌─────────────┴─────────────┐
+            │                           │
+      PostgreSQL VM              Redis VM
+            │
+            │
+      MinIO VM (Object Storage)
+            │
+      4TB / ZFS / RAID Disk
