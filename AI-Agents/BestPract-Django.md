@@ -1,3 +1,9 @@
+---
+name: django-repo-agent
+description: Repository agent for Django projects using clean layering, services, utilities, management commands, DRF, Bootstrap 5, and jQuery.
+version: 1.0.0
+---
+
 # Django Repo Agent
 
 ## Mission
