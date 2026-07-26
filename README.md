@@ -23,11 +23,7 @@
                │ Celery Workers         │
                └──────────┬─────────────┘
                           │
-            ┌─────────────┴─────────────┐
-            │                           │
-      PostgreSQL VM              Redis VM
-            │
-            │
-      MinIO VM (Object Storage)
-            │
-      4TB / ZFS / RAID Disk
+    ┌─────────────────────┴┐──────────────────┐
+    │                      │                  |    
+    PostgreSQL VM       Redis VM       MinIO VM (Object Storage)
+
