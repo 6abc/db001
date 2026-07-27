@@ -22,7 +22,7 @@ sudo cat /var/lib/rancher/k3s/server/node-token
 
 ## 🔓 Enable Non-Root User Access (Run on the K3s Server)
 
-By default, the K3s kubeconfig file (`/etc/rancher/k3s/k3s.yaml`) is owned by `root`, so non-root users cannot run `kubectl` commands. To enable permanent access for your current user, copy the kubeconfig to your home directory and configure `kubectl` to use it by default.
+By default, the K3s kubeconfig file (`/etc/rancher/k3s/k3s.yaml`) is owned by `root`, so non-root users cannot run `kubectl` commands. To enable permanent access, copy the kubeconfig to your home directory, set the correct ownership and permissions, and configure your shell to use it automatically.
 
 ### 1. Create the Kubernetes configuration directory
 
@@ -48,27 +48,74 @@ sudo chown "$(id -u):$(id -g)" ~/.kube/config
 chmod 600 ~/.kube/config
 ```
 
-### 5. Configure `kubectl` to use the copied kubeconfig permanently
+### 5. Restore the default Bash configuration (if `.bashrc` is missing)
+
+> **Note:** Skip this step if your `~/.bashrc` already exists and contains your custom shell configuration.
+
+```bash
+cp /etc/skel/.bashrc ~/.bashrc
+```
+
+### 6. Configure `kubectl` to use the copied kubeconfig permanently
 
 ```bash
 echo 'export KUBECONFIG=$HOME/.kube/config' >> ~/.bashrc
 source ~/.bashrc
 ```
 
-> **Note:** If you use a shell other than Bash (such as Zsh), add the `export` command to the appropriate shell configuration file (for example, `~/.zshrc`).
+> **Note:** If you use a shell other than Bash (such as Zsh), add the export command to the appropriate shell configuration file (for example, `~/.zshrc`) instead of `~/.bashrc`.
 
-### 6. Verify the configuration
+### 7. Verify the configuration
 
 ```bash
+echo $KUBECONFIG
 kubectl get nodes
 ```
 
 Expected output:
 
 ```text
+/home/<your-user>/.kube/config
+
 NAME     STATUS   ROLES           AGE   VERSION
 k3cont   Ready    control-plane   ...   ...
 ```
+
+---
+
+### Troubleshooting
+
+If `kubectl` still attempts to use `/etc/rancher/k3s/k3s.yaml` after completing the steps above:
+
+1. Ensure the environment variable is set:
+
+   ```bash
+   echo $KUBECONFIG
+   ```
+
+   Expected output:
+
+   ```text
+   /home/<your-user>/.kube/config
+   ```
+
+2. Confirm the copied kubeconfig exists:
+
+   ```bash
+   ls -l ~/.kube/config
+   ```
+
+3. If your home directory was created manually and `~/.bashrc` cannot be written, fix its ownership:
+
+   ```bash
+   sudo chown -R "$(id -u):$(id -g)" "$HOME"
+   ```
+
+4. Start a new terminal session (or log out and back in) and verify:
+
+   ```bash
+   kubectl get nodes
+   ```
 
 ---
 
