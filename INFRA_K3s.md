@@ -158,6 +158,17 @@ Return to your **Master Node** and execute this command to confirm all infrastru
 kubectl get nodes -o wide
 ```
 
+### 4. To make the control-plane only manage the cluster
+```bash
+kubectl taint nodes k3cont node-role.kubernetes.io/control-plane=true:NoSchedule
+```
+
+### 5. If you want the worker nodes to display the worker role
+```sh
+kubectl label node k3work1 node-role.kubernetes.io/worker=worker
+kubectl label node k3work2 node-role.kubernetes.io/worker=worker
+```
+
 ---
 
 ## 🚀 Basic Cluster Operations
