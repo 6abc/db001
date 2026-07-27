@@ -3,6 +3,8 @@
 1. Jenkins
 2. PostgreSQL
 3. REDIS
+4. MinIO
+5. Cloud Flare SSH Config
 
 ## Update hostname 
 1. Debian - /etc/hostname & sudo nano /etc/hosts
