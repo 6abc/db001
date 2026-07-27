@@ -27,3 +27,4 @@
     │                      │                  |    
     PostgreSQL VM       Redis VM       MinIO VM (Object Storage)
 
+CODE -> GITHUB -> DOCKER HUB -> KUBERNATES -> CLOUDFLARE -> INTERNET 
