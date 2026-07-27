@@ -9,7 +9,7 @@ This guide details the end-to-end process for installing a lightweight K3s clust
 ### 1. Master Node Installation
 Run this command on your designated primary server to initialize the control plane.
 ```bash
-curl -sfL https://k3s.io | sh -
+curl -sfL https://get.k3s.io | sh -
 ```
 Verify the master node is running and operational:
 ```bash
