@@ -4,8 +4,7 @@
 2. PostgreSQL
 3. REDIS
 4. MinIO
-5. Docker
-6. Cloud Flare SSH Config
+5. Cloud Flare SSH Config
 
 ## CODE -> GITHUB -> DOCKER HUB -> KUBERNATES -> CLOUDFLARE -> INTERNET 
 
