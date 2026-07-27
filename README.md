@@ -6,6 +6,8 @@
 4. MinIO
 5. Cloud Flare SSH Config
 
+## CODE -> GITHUB -> DOCKER HUB -> KUBERNATES -> CLOUDFLARE -> INTERNET 
+
 ## Update hostname 
 1. Debian - /etc/hostname & sudo nano /etc/hosts
 
@@ -28,5 +30,3 @@
     ┌─────────────────────┴┐──────────────────┐
     │                      │                  |    
     PostgreSQL VM       Redis VM       MinIO VM (Object Storage)
-
-CODE -> GITHUB -> DOCKER HUB -> KUBERNATES -> CLOUDFLARE -> INTERNET 
