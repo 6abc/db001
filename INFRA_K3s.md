@@ -20,32 +20,84 @@ Extract the unique cluster join token required for connecting worker nodes:
 sudo cat /var/lib/rancher/k3s/server/node-token
 ```
 
-### 🔓 Enable Non-Root User Access (Run on Master Node)
-By default, K3s requires root permissions to access the cluster configuration. Run these steps to allow standard users to run `kubectl` commands without prefixing `sudo`.
+## 🔓 Enable Non-Root User Access (Run on the K3s Server)
 
-1. **Create the local config directory:**
-   ```bash
-   mkdir -p \$HOME/.kube
-   ```
-2. **Copy the cluster configuration file:**
-   ```bash
-   sudo cp /etc/rancher/k3s/k3s.yaml \$HOME/.kube/config
-   ```
-3. **Change ownership of the configuration file to your user:**
-   ```bash
-   sudo chown \$(id -u):\((id -g)\)HOME/.kube/config
-   ```
-4. **Secure the file permissions:**
-   ```bash
-   chmod 600 \$HOME/.kube/config
-   ```
-5. **Set the environment variable (Optional, adds persistence):**
-   ```bash
-   echo "export KUBECONFIG=\$HOME/.kube/config" >> ~/.bashrc
-   source ~/.bashrc
-   ```
+By default, the K3s kubeconfig file (`/etc/rancher/k3s/k3s.yaml`) is owned by `root`, so non-root users cannot run `kubectl` commands. To enable permanent access for your current user, copy the kubeconfig to your home directory and configure `kubectl` to use it by default.
 
-*(Note: All subsequent `kubectl` commands below can now be run without `sudo`)*
+### 1. Create the Kubernetes configuration directory
+
+```bash
+mkdir -p ~/.kube
+```
+
+### 2. Copy the K3s kubeconfig
+
+```bash
+sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
+```
+
+### 3. Change ownership to your user
+
+```bash
+sudo chown "$(id -u):$(id -g)" ~/.kube/config
+```
+
+### 4. Secure the kubeconfig file
+
+```bash
+chmod 600 ~/.kube/config
+```
+
+### 5. Configure `kubectl` to use the copied kubeconfig permanently
+
+```bash
+echo 'export KUBECONFIG=$HOME/.kube/config' >> ~/.bashrc
+source ~/.bashrc
+```
+
+> **Note:** If you use a shell other than Bash (such as Zsh), add the `export` command to the appropriate shell configuration file (for example, `~/.zshrc`).
+
+### 6. Verify the configuration
+
+```bash
+kubectl get nodes
+```
+
+Expected output:
+
+```text
+NAME     STATUS   ROLES           AGE   VERSION
+k3cont   Ready    control-plane   ...   ...
+```
+
+---
+
+## 🔒 Alternative: Configure K3s for Multi-User Access (Optional)
+
+If multiple trusted users need to access the cluster, configure K3s to generate a kubeconfig with readable permissions.
+
+Create or edit the K3s configuration file:
+
+```bash
+sudo mkdir -p /etc/rancher/k3s
+sudo nano /etc/rancher/k3s/config.yaml
+```
+
+Add:
+
+```yaml
+write-kubeconfig-mode: "0644"
+```
+
+Restart K3s:
+
+```bash
+sudo systemctl restart k3s
+```
+
+> **Note:** If K3s is running inside a container, restart the container instead of using `systemctl`.
+
+This setting causes `/etc/rancher/k3s/k3s.yaml` to be created with read permissions for all users. For production environments, consider using `0640` with a dedicated group instead of `0644` to limit access.
 
 ### 2. Worker Node Installation
 Run this command on each background server you wish to join to the cluster. Replace placeholders with your master node's local IP address and the token extracted above.
