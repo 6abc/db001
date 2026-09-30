@@ -76,6 +76,7 @@ Recommended settings:
 | Discard | Enabled |
 | SSD Emulation | Enabled (recommended for SSD/NVMe storage) |
 | Backup | Enabled |
+| Get-Key | https://www.min.io/pricing |
 
 Start the VM (or rescan disks if hot-added).
 
@@ -426,6 +427,7 @@ mc --version
 
 ```bash
 mc alias set local http://127.0.0.1:9000 minioadmin YOUR_ROOT_PASSWORD
+mc license update minio-local /tmp/minio.license
 ```
 
 Verify
