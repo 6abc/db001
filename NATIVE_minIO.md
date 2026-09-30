@@ -407,7 +407,7 @@ In the MinIO Community Edition, user and policy management must be performed exc
 ```bash
 cd /tmp
 
-wget https://dl.min.io/client/mc/release/linux-amd64/mc
+wget https://dl.min.io/aistor/mc/release/linux-amd64/mc
 
 chmod +x mc
 
