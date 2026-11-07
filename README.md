@@ -5,6 +5,7 @@
 3. REDIS
 4. MinIO
 5. Cloud Flare SSH Config
+6. Native Wazuh Fixing
 
 ## CODE -> GITHUB -> DOCKER HUB -> KUBERNATES -> CLOUDFLARE -> INTERNET 
 
